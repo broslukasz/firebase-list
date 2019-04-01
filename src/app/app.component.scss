@@ -1,0 +1,32 @@
+@import "../variables";
+
+header {
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  font-size: $font-size-menu;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: $app-color-menu;
+  }
+}
+
+mat-toolbar {
+  background: $app-color-toolbar;
+}
+
+.logo {
+  text-align: center;
+  margin-left: 40px;
+}
+
+.active-link {
+  background: $app-color-menu;
+}
