@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { User } from '../user';
-import { UserTableHeader } from '../user-table-header';
+import { User } from '../user.model';
+import { UserTableHeader } from '../user-table-header.enum';
 
 @Component({
   selector: 'app-edit-user-dialog',
@@ -17,7 +17,7 @@ export class EditUserDialogComponent implements OnInit {
     UserTableHeader.city,
     UserTableHeader.street,
     UserTableHeader.number,
-  ]
+  ];
 
   constructor(
     public dialogRef: MatDialogRef<EditUserDialogComponent>,

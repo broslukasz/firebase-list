@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import { User } from './user';
-import { UserTableHeader } from './user-table-header';
+import { User } from './user.model';
 import { of, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
 import { cloneDeep } from 'lodash-es';
 import { mergeMap } from 'rxjs/operators';
+import { UserTableHeader } from './user-table-header.enum';
 
 @Component({
   selector: 'app-users',
