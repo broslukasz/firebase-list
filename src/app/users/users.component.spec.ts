@@ -4,7 +4,7 @@ import { UsersComponent } from './users.component';
 import { UserService } from './user.service';
 import { instance, mock } from 'ts-mockito';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatTableModule } from '@angular/material';
+import { MatDialog, MatTableModule } from '@angular/material';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -18,7 +18,8 @@ describe('UsersComponent', () => {
     }).overrideComponent(UsersComponent, {
       set: {
         providers: [
-          {provide: UserService, useValue: instance(mock(UserService))}
+          {provide: UserService, useValue: instance(mock(UserService))},
+          {provide: MatDialog, useValue: instance(mock(MatDialog))}
         ]
       }
     })
