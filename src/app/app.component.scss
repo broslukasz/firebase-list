@@ -20,6 +20,11 @@ a {
 
 mat-toolbar {
   background: $app-color-toolbar;
+  padding-left: 80px;
+}
+
+main {
+  padding: 20px;
 }
 
 .logo {
