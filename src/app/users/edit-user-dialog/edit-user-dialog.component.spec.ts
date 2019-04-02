@@ -4,8 +4,9 @@ import { EditUserDialogComponent } from './edit-user-dialog.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material';
 import { instance, mock } from 'ts-mockito';
+import { usersFactory } from '../../../test/users-factory';
 
 describe('EditUserDialogComponent', () => {
   let component: EditUserDialogComponent;
@@ -22,7 +23,7 @@ describe('EditUserDialogComponent', () => {
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       providers: [
         { provide: MatDialogRef, useValue: instance(mock(MatDialogRef))},
-        { provide: MAT_DIALOG_DATA, useValue: {}}
+        { provide: MAT_DIALOG_DATA, useValue: usersFactory.build()}
       ]
     })
     .compileComponents();
