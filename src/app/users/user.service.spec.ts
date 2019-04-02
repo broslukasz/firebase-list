@@ -1,14 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { instance, mock } from 'ts-mockito';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('UserService', () => {
   beforeEach(() => TestBed.configureTestingModule({
+    imports: [
+      HttpClientTestingModule
+    ],
     providers: [
       UserService,
-      {provide: AngularFireDatabase, useValue: instance(mock(AngularFireDatabase))}
     ]
   }));
 

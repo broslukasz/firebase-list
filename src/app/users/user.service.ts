@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { FirebaseObject } from '../../core/enums/firebase-object';
 import { User } from './user';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UserService {
+  private readonly baseUrl = `${environment.apiUrl}`;
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private http: HttpClient) {}
 
-  public getUsers(): Observable<User[]> {
-    return this.db.object<User[]>(FirebaseObject.Users).valueChanges();
+  public findAll(): Observable<User[]> {
+      return this.http.get<User[]>(`${this.baseUrl}/users`);
+  }
+
+  public remove(userId: string): Observable<User[]> {
+    return this.http.delete<User[]>(`${this.baseUrl}/users/${userId}`);
   }
 }

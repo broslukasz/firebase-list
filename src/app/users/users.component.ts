@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import { Observable } from 'rxjs';
 import { User } from './user';
 import { UserTable } from './user-table';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -10,7 +10,7 @@ import { UserTable } from './user-table';
   styleUrls: ['./users.component.sass'],
   providers: [UserService]
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   users$: Observable<User[]>;
   userTable = UserTable;
   displayedColumns = [
@@ -26,11 +26,23 @@ export class UsersComponent implements OnInit {
     UserTable.edit,
   ];
 
+  private userRemoveSubscription: Subscription;
+
   constructor(
     public userService: UserService
   ) { }
 
   ngOnInit(): void {
-    this.users$ = this.userService.getUsers();
+    this.users$ = this.userService.findAll();
+  }
+
+  ngOnDestroy(): void {
+    this.userRemoveSubscription.unsubscribe();
+  }
+
+  removeUser(userId: string): void {
+    this.userRemoveSubscription = this.userService.remove(userId).subscribe(() => {
+      this.users$ = this.userService.findAll();
+    });
   }
 }
