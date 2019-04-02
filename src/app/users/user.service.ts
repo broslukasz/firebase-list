@@ -12,10 +12,10 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   public findAll(): Observable<User[]> {
-      return this.http.get<User[]>(`${this.baseUrl}/users`);
+      return this.http.get<User[]>(`${this.baseUrl}`);
   }
 
   public remove(userId: string): Observable<User[]> {
-    return this.http.delete<User[]>(`${this.baseUrl}/users/${userId}`);
+    return this.http.delete<User[]>(`${this.baseUrl}/${userId}`);
   }
 }
