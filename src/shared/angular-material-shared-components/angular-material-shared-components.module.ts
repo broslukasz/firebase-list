@@ -6,7 +6,6 @@ import { MatTableModule, MatToolbarModule } from '@angular/material';
   declarations: [],
   imports: [
     CommonModule,
-    MatToolbarModule,
   ],
   exports: [
     MatToolbarModule,

@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UsersComponent } from './users.component';
+import { UserService } from './user.service';
+import { instance, mock } from 'ts-mockito';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatTableModule } from '@angular/material';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -8,7 +12,15 @@ describe('UsersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UsersComponent ]
+      imports: [MatTableModule],
+      declarations: [ UsersComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    }).overrideComponent(UsersComponent, {
+      set: {
+        providers: [
+          {provide: UserService, useValue: instance(mock(UserService))}
+        ]
+      }
     })
     .compileComponents();
   }));
