@@ -1,4 +1,4 @@
-export enum UserTable {
+export enum UserTableHeader {
   id = 'id',
   name = 'name',
   surname = 'surname',

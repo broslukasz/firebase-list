@@ -1,3 +1,7 @@
 .mat-header-cell, .mat-cell {
   font-size: $app-font-size-normal;
 }
+
+.cdk-overlay-pane {
+  overflow-y: scroll;
+}

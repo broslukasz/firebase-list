@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
-import { UserTable } from './user-table';
+import { UserTableHeader } from './user-table-header';
 import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
@@ -15,18 +15,18 @@ import { cloneDeep } from 'lodash-es';
 })
 export class UsersComponent implements OnInit, OnDestroy {
   users$: Observable<User[]>;
-  userTable = UserTable;
+  userTable = UserTableHeader;
   displayedColumns = [
-    UserTable.id,
-    UserTable.name,
-    UserTable.surname,
-    UserTable.birthDate,
-    UserTable.phone,
-    UserTable.city,
-    UserTable.street,
-    UserTable.number,
-    UserTable.delete,
-    UserTable.edit,
+    UserTableHeader.id,
+    UserTableHeader.name,
+    UserTableHeader.surname,
+    UserTableHeader.birthDate,
+    UserTableHeader.phone,
+    UserTableHeader.city,
+    UserTableHeader.street,
+    UserTableHeader.number,
+    UserTableHeader.delete,
+    UserTableHeader.edit,
   ];
 
   private userRemoveSubscription: Subscription;
@@ -47,14 +47,13 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   removeUser(userId: string): void {
-    this.userRemoveSubscription = this.userService.remove(userId).subscribe(() => {
-      this.users$ = this.userService.findAll();
-    });
+    this.users$ = this.userService.remove(userId);
   }
 
   openDialog(user: User): void {
     const dialogRef = this.dialog.open<EditUserDialogComponent, User>(EditUserDialogComponent, {
-      data: cloneDeep(user)
+      data: cloneDeep(user),
+      width: '400px'
     });
 
     this.dialogSubscription = dialogRef.afterClosed().subscribe((changedUser: User) => {
