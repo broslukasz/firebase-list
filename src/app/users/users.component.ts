@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
 import { UserTableHeader } from './user-table-header';
-import { Observable, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
 import { cloneDeep } from 'lodash-es';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -14,7 +15,7 @@ import { cloneDeep } from 'lodash-es';
   providers: [UserService]
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  users$: Observable<User[]>;
+  users: User[] = [];
   userTable = UserTableHeader;
   displayedColumns = [
     UserTableHeader.id,
@@ -38,7 +39,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.users$ = this.userService.findAll();
+    this.userService.findAll().subscribe((users: User[]) => {
+      this.users = users;
+    });
   }
 
   ngOnDestroy(): void {
@@ -47,7 +50,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   removeUser(userId: string): void {
-    this.users$ = this.userService.remove(userId);
+    this.userService.remove(userId).subscribe((users: User[]) => {
+      this.users = users;
+    });
   }
 
   openDialog(user: User): void {
@@ -56,9 +61,17 @@ export class UsersComponent implements OnInit, OnDestroy {
       width: '400px'
     });
 
-    this.dialogSubscription = dialogRef.afterClosed().subscribe((changedUser: User) => {
-      if (changedUser) {
-        this.users$ = this.userService.edit(changedUser);
+    this.dialogSubscription = dialogRef.afterClosed().pipe(
+      mergeMap((changedUser: User) => {
+        if (changedUser) {
+          return this.userService.edit(changedUser);
+        }
+
+        return of();
+      })
+    ).subscribe((updatedUsers: User[]) => {
+      if (updatedUsers) {
+        this.users = updatedUsers;
       }
     });
   }

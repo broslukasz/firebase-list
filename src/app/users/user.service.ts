@@ -3,7 +3,7 @@ import { User } from './user';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -17,7 +17,12 @@ export class UserService {
 
   public remove(userId: string): Observable<User[]> {
     return this.http.delete<User[]>(`${this.baseUrl}/${userId}`).pipe(
+      catchError((error) => {
+        alert('Couldnt Remove');
+        throw new Error(error);
+      }),
       mergeMap(() => {
+        alert('User Removed');
         return this.findAll();
       })
     );
