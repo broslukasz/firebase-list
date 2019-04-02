@@ -32,6 +32,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   private userRemoveSubscription: Subscription;
   private dialogSubscription: Subscription;
+  private findAllSubscription: Subscription;
 
   constructor(
     public userService: UserService,
@@ -39,7 +40,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.userService.findAll().subscribe((users: User[]) => {
+    this.findAllSubscription = this.userService.findAll().subscribe((users: User[]) => {
       this.users = users;
     });
   }
@@ -47,10 +48,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userRemoveSubscription.unsubscribe();
     this.dialogSubscription.unsubscribe();
+    this.findAllSubscription.unsubscribe();
   }
 
   removeUser(userId: string): void {
-    this.userService.remove(userId).subscribe((users: User[]) => {
+    this.userRemoveSubscription = this.userService.remove(userId).subscribe((users: User[]) => {
       this.users = users;
     });
   }

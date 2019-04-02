@@ -12,7 +12,12 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   public findAll(): Observable<User[]> {
-      return this.http.get<User[]>(`${this.baseUrl}`);
+      return this.http.get<User[]>(`${this.baseUrl}`).pipe(
+        catchError((error) => {
+          alert('Error');
+          throw new Error(error);
+        }),
+      );
   }
 
   public remove(userId: string): Observable<User[]> {
