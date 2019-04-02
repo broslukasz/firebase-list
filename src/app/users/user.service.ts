@@ -17,22 +17,27 @@ export class UserService {
 
   public remove(userId: string): Observable<User[]> {
     return this.http.delete<User[]>(`${this.baseUrl}/${userId}`).pipe(
+      mergeMap(() => {
+        alert('User Removed');
+        return this.findAll();
+      }),
       catchError((error) => {
         alert('Couldnt Remove');
         throw new Error(error);
       }),
-      mergeMap(() => {
-        alert('User Removed');
-        return this.findAll();
-      })
     );
   }
 
   public edit(user: User): Observable<User[]> {
     return this.http.patch<User[]>(`${this.baseUrl}/${user.id}`, user).pipe(
       mergeMap(() => {
+        alert('User Updated');
         return this.findAll();
-      })
+      }),
+      catchError((error) => {
+        alert('Couldnt update user');
+        throw new Error(error);
+      }),
     );
   }
 }
