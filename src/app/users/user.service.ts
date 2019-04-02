@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { User } from './user';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { flatMap, mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,15 @@ export class UserService {
       return this.http.get<User[]>(`${this.baseUrl}`);
   }
 
-  public remove(userId: string): Observable<User[]> {
-    return this.http.delete<User[]>(`${this.baseUrl}/${userId}`);
+  public remove(userId: string): Observable<{}> {
+    return this.http.delete<{}>(`${this.baseUrl}/${userId}`);
+  }
+
+  public edit(user: User): Observable<User[]> {
+    return this.http.patch<User[]>(`${this.baseUrl}/${user.id}`, user).pipe(
+      mergeMap(() => {
+        return this.findAll();
+      })
+    );
   }
 }

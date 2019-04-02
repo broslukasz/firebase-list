@@ -3,6 +3,9 @@ import { UserService } from './user.service';
 import { User } from './user';
 import { UserTable } from './user-table';
 import { Observable, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
+import { cloneDeep } from 'lodash-es';
 
 @Component({
   selector: 'app-users',
@@ -27,9 +30,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   ];
 
   private userRemoveSubscription: Subscription;
+  private dialogSubscription: Subscription;
 
   constructor(
-    public userService: UserService
+    public userService: UserService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -38,11 +43,24 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userRemoveSubscription.unsubscribe();
+    this.dialogSubscription.unsubscribe();
   }
 
   removeUser(userId: string): void {
     this.userRemoveSubscription = this.userService.remove(userId).subscribe(() => {
       this.users$ = this.userService.findAll();
+    });
+  }
+
+  openDialog(user: User): void {
+    const dialogRef = this.dialog.open<EditUserDialogComponent, User>(EditUserDialogComponent, {
+      data: cloneDeep(user)
+    });
+
+    this.dialogSubscription = dialogRef.afterClosed().subscribe((changedUser: User) => {
+      if (changedUser) {
+        this.users$ = this.userService.edit(changedUser);
+      }
     });
   }
 }

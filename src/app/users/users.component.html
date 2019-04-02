@@ -58,7 +58,7 @@
     <ng-container matColumnDef="{{ userTable.edit }}">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let user">
-        <button mat-raised-button color="primary">edit</button>
+        <button mat-raised-button color="primary" (click)="openDialog(user)">edit</button>
       </td>
     </ng-container>
 
