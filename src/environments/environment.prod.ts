@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.myjson.com/bins/1381ay',
+  apiUrl: 'api',
   firebase: {
     apiKey: 'IzaSyC1F-MnDyVM3aoe2RsgIzwtLGKRsl1aWkU',
     authDomain: 'ubros-firebase-list.firebaseapp.com',

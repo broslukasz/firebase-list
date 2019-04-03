@@ -7,7 +7,7 @@ import { catchError, mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
-  private readonly baseUrl = `${environment.apiUrl}`;
+  private readonly baseUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {}
 
