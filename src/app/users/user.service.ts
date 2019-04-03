@@ -36,8 +36,7 @@ export class UserService {
   remove(userId: string): Observable<User[]> {
     return this.http.delete<User[]>(`${this.baseUrl}/${userId}`).pipe(
       tap(() => {
-        const removedUser = this.users.find(user => user.id === userId);
-        const index = this.users.indexOf(removedUser);
+        const index = this.users.findIndex(user => user.id === userId);
         this.users.splice(index, 1);
         this.users = cloneDeep(this.users);
       }),
