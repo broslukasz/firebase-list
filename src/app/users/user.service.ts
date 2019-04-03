@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { User } from './user.model';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, mergeMap } from 'rxjs/operators';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable()
 export class UserService {
@@ -34,7 +38,7 @@ export class UserService {
   }
 
   public edit(user: User): Observable<User[]> {
-    return this.http.patch<User[]>(`${this.baseUrl}/${user.id}`, user).pipe(
+    return this.http.put<User[]>(`${this.baseUrl}`, user, httpOptions).pipe(
       mergeMap(() => {
         alert('User Updated');
         return this.findAll();
