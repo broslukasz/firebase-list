@@ -1,18 +1,19 @@
-import { Injectable, OnInit } from '@angular/core';
-import { User } from './user.model';
+import { Injectable, OnDestroy } from '@angular/core';
+
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { tap } from 'rxjs/internal/operators/tap';
 import { cloneDeep } from 'lodash-es';
+import { environment } from '../../../environments/environment';
+import { User } from '../user.model';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
 
 @Injectable()
-export class UserService implements OnInit {
+export class UserDataService implements OnDestroy {
   private readonly baseUrl = `${environment.apiUrl}/users`;
   private usersSource = new BehaviorSubject<User[] | null>(null);
   users$: Observable<User[] | null> = this.usersSource.asObservable();
@@ -24,7 +25,7 @@ export class UserService implements OnInit {
   constructor(private http: HttpClient) {
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
     this.usersSubscription.unsubscribe();
     this.deleteSubscription.unsubscribe();
     this.editSubscription.unsubscribe();
@@ -74,3 +75,4 @@ export class UserService implements OnInit {
     });
   }
 }
+

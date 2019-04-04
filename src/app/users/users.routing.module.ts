@@ -5,8 +5,6 @@ import { UsersComponent } from './users.component';
 const userRoutes: Routes = [
   {
     path: '',
-    redirectTo: '',
-    pathMatch: 'full',
     component: UsersComponent
   },
 ];

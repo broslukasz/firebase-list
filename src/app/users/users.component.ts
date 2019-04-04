@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserService } from './user.service';
+import { UserService } from './services/user.service';
 import { User } from './user.model';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
 import { cloneDeep } from 'lodash-es';
 import { UserTableHeader } from './user-table-header.enum';
+import { UserDataService } from './services/user-data.service';
 
 @Component({
   selector: 'app-users',
@@ -32,13 +33,13 @@ export class UsersComponent implements OnInit, OnDestroy {
   private dialogSubscription: Subscription;
 
   constructor(
-    private userService: UserService,
+    private userDataService: UserDataService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.users = this.userService.users$;
-    this.userService.findAll();
+    this.users = this.userDataService.users$;
+    this.userDataService.findAll();
   }
 
   ngOnDestroy(): void {
@@ -46,7 +47,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   removeUser(userId: string): void {
-    this.userService.remove(userId);
+    this.userDataService.remove(userId);
   }
 
   openDialog(user: User): void {
@@ -58,7 +59,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.dialogSubscription = dialogRef.afterClosed()
       .subscribe((editedUser: User) => {
       if (editedUser) {
-        this.userService.edit(editedUser);
+        this.userDataService.edit(editedUser);
       }
     });
   }
