@@ -14,8 +14,8 @@ const httpOptions = {
 @Injectable()
 export class UserService implements OnInit {
   private readonly baseUrl = `${environment.apiUrl}/users`;
-  private usersSource: BehaviorSubject<User[]> = new BehaviorSubject([]);
-  users$: Observable<User[]> = this.usersSource.asObservable();
+  private usersSource = new BehaviorSubject<User[] | null>(null);
+  users$: Observable<User[] | null> = this.usersSource.asObservable();
 
   private usersSubscription: Subscription;
   private deleteSubscription: Subscription;
@@ -43,6 +43,9 @@ export class UserService implements OnInit {
 
   remove(userId: string): void {
     this.deleteSubscription =  this.http.delete<User[]>(`${this.baseUrl}/${userId}`).pipe(
+      tap(() => {
+        alert('User Removed');
+      }),
       catchError((error) => {
         alert('Couldnt Remove');
         throw new Error(error);

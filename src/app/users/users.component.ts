@@ -14,7 +14,7 @@ import { UserTableHeader } from './user-table-header.enum';
   providers: [UserService]
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  users: Observable<User[]>;
+  users: Observable<User[] | null>;
   userTable = UserTableHeader;
   displayedColumns = [
     UserTableHeader.id,
