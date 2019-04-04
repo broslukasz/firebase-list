@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user.model';
-import { of, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
 import { cloneDeep } from 'lodash-es';
-import { mergeMap } from 'rxjs/operators';
 import { UserTableHeader } from './user-table-header.enum';
 
 @Component({
@@ -15,7 +14,7 @@ import { UserTableHeader } from './user-table-header.enum';
   providers: [UserService]
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  users: User[];
+  users: Observable<User[]>;
   userTable = UserTableHeader;
   displayedColumns = [
     UserTableHeader.id,
@@ -30,9 +29,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     UserTableHeader.edit,
   ];
 
-  private userRemoveSubscription: Subscription;
   private dialogSubscription: Subscription;
-  private findAllSubscription: Subscription;
 
   constructor(
     private userService: UserService,
@@ -40,21 +37,16 @@ export class UsersComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.findAllSubscription = this.userService.findAll().subscribe((users: User[]) => {
-      this.users = users;
-    });
+    this.users = this.userService.users$;
+    this.userService.findAll();
   }
 
   ngOnDestroy(): void {
-    this.userRemoveSubscription.unsubscribe();
     this.dialogSubscription.unsubscribe();
-    this.findAllSubscription.unsubscribe();
   }
 
   removeUser(userId: string): void {
-    this.userRemoveSubscription = this.userService.remove(userId).subscribe((users: User[]) => {
-      this.users = users;
-    });
+    this.userService.remove(userId);
   }
 
   openDialog(user: User): void {
@@ -63,17 +55,10 @@ export class UsersComponent implements OnInit, OnDestroy {
       width: '400px'
     });
 
-    this.dialogSubscription = dialogRef.afterClosed().pipe(
-      mergeMap((changedUser: User) => {
-        if (changedUser) {
-          return this.userService.edit(changedUser);
-        }
-
-        return of();
-      })
-    ).subscribe((updatedUsers: User[]) => {
-      if (updatedUsers) {
-        this.users = updatedUsers;
+    this.dialogSubscription = dialogRef.afterClosed()
+      .subscribe((editedUser: User) => {
+      if (editedUser) {
+        this.userService.edit(editedUser);
       }
     });
   }
