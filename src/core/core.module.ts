@@ -11,8 +11,6 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './services/in-memory-data.service';
 
 @NgModule({
-  declarations: [
-  ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
@@ -23,9 +21,6 @@ import { InMemoryDataService } from './services/in-memory-data.service';
       InMemoryDataService, { dataEncapsulation: false }),
     FormsModule,
   ],
-  providers: [
-    AngularFireDatabase
-  ]
 })
 export class CoreModule {
 

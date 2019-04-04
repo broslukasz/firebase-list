@@ -16,7 +16,6 @@ import { SharedModule } from '../shared/shared.module';
     CoreModule.forRoot(),
     SharedModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

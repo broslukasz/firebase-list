@@ -8,7 +8,7 @@ import { UserTableHeader } from '../user-table-header.enum';
   templateUrl: './edit-user-dialog.component.html',
   styleUrls: ['./edit-user-dialog.component.sass']
 })
-export class EditUserDialogComponent implements OnInit {
+export class EditUserDialogComponent {
   userInputFields = [
     UserTableHeader.name,
     UserTableHeader.surname,
@@ -23,10 +23,7 @@ export class EditUserDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User) {}
 
-  ngOnInit() {
-  }
-
-  cancel() {
+  cancel(): void {
     this.dialogRef.close();
   }
 }

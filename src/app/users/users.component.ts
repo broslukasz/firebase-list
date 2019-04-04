@@ -15,7 +15,7 @@ import { UserTableHeader } from './user-table-header.enum';
   providers: [UserService]
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  users: User[] = [];
+  users: User[];
   userTable = UserTableHeader;
   displayedColumns = [
     UserTableHeader.id,
@@ -35,8 +35,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   private findAllSubscription: Subscription;
 
   constructor(
-    public userService: UserService,
-    public dialog: MatDialog
+    private userService: UserService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
