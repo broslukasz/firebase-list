@@ -52,7 +52,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   removeUser(userId: string): void {
-    this.userDataService.remove(userId);
+    this.store.dispatch(new usersActions.DeleteUserAction(userId));
   }
 
   openDialog(user: User): void {

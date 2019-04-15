@@ -13,6 +13,7 @@ import { StoreModule } from '@ngrx/store';
 import { usersReducer } from '../app/reducers/users-reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { UsersEffects } from '../app/effects/users-effects.service';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { UsersEffects } from '../app/effects/users-effects.service';
     StoreModule.forRoot({
       users: usersReducer
     }),
-    EffectsModule.forRoot([UsersEffects])
+    EffectsModule.forRoot([UsersEffects]),
+    StoreDevtoolsModule.instrument()
   ],
 })
 export class CoreModule {

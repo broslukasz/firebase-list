@@ -19,4 +19,10 @@ export class UsersEffects {
     switchMap(() => this.usersDataService.getUsers()),
     map(users => new usersActions.LoadUsersActionSuccess(users))
   );
+
+  @Effect() deleteUser$ = this.actions$.pipe(
+    ofType(usersActions.DELETE_USER),
+    switchMap((action: usersActions.DeleteUserActionSuccess) => this.usersDataService.remove(action.payload)),
+    map(userId => new usersActions.DeleteUserActionSuccess(userId))
+  );
 }

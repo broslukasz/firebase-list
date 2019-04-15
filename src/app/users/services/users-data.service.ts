@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { tap } from 'rxjs/internal/operators/tap';
 import { cloneDeep } from 'lodash-es';
 import { environment } from '../../../environments/environment';
@@ -19,16 +19,12 @@ export class UsersDataService implements OnDestroy {
   private readonly baseUrl = `${environment.apiUrl}/users`;
   private usersSource = new BehaviorSubject<User[] | null>(null);
 
-  private usersSubscription: Subscription;
-  private deleteSubscription: Subscription;
   private editSubscription: Subscription;
 
   constructor(private http: HttpClient) {
   }
 
   ngOnDestroy(): void {
-    this.usersSubscription.unsubscribe();
-    this.deleteSubscription.unsubscribe();
     this.editSubscription.unsubscribe();
   }
 
@@ -41,21 +37,19 @@ export class UsersDataService implements OnDestroy {
     );
   }
 
-  remove(userId: string): void {
-    this.deleteSubscription =  this.http.delete<User[]>(`${this.baseUrl}/${userId}`).pipe(
+  remove(userId: string): Observable<string> {
+    return this.http.delete<string>(`${this.baseUrl}/${userId}`).pipe(
       tap(() => {
         alert('User Removed');
+      }),
+      map(() => {
+        return userId;
       }),
       catchError((error) => {
         alert('Couldnt Remove');
         throw new Error(error);
       }),
-    ).subscribe(() => {
-      const users = this.usersSource.getValue();
-      const index = users.findIndex(user => user.id === userId);
-      users.splice(index, 1);
-      this.usersSource.next(cloneDeep(users));
-    });
+    );
   }
 
   edit(editedUser: User): void {
