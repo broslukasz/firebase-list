@@ -11,6 +11,12 @@ export function usersReducer(state: User[] = [], action: usersActions.Action) {
       return state.filter(user => user.id !== action.payload);
     }
 
+    case usersActions.EDIT_USER_SUCCESS: {
+      return state.map(user => {
+        return user.id === action.payload.id ? action.payload : user;
+      });
+    }
+
     default: {
       return state;
     }

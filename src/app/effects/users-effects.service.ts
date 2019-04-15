@@ -22,7 +22,13 @@ export class UsersEffects {
 
   @Effect() deleteUser$ = this.actions$.pipe(
     ofType(usersActions.DELETE_USER),
-    switchMap((action: usersActions.DeleteUserActionSuccess) => this.usersDataService.remove(action.payload)),
+    switchMap((action: usersActions.DeleteUserAction) => this.usersDataService.remove(action.payload)),
     map(userId => new usersActions.DeleteUserActionSuccess(userId))
+  );
+
+  @Effect() editUser$ = this.actions$.pipe(
+    ofType(usersActions.EDIT_USER),
+    switchMap((action: usersActions.EditUserAction) => this.usersDataService.edit(action.payload)),
+    map(user => new usersActions.EditUserActionSuccess(user))
   );
 }

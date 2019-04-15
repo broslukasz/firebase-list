@@ -1,10 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { tap } from 'rxjs/internal/operators/tap';
-import { cloneDeep } from 'lodash-es';
 import { environment } from '../../../environments/environment';
 import { User } from '../../models/user.model';
 
@@ -15,18 +14,10 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class UsersDataService implements OnDestroy {
+export class UsersDataService {
   private readonly baseUrl = `${environment.apiUrl}/users`;
-  private usersSource = new BehaviorSubject<User[] | null>(null);
 
-  private editSubscription: Subscription;
-
-  constructor(private http: HttpClient) {
-  }
-
-  ngOnDestroy(): void {
-    this.editSubscription.unsubscribe();
-  }
+  constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}`).pipe(
@@ -42,9 +33,7 @@ export class UsersDataService implements OnDestroy {
       tap(() => {
         alert('User Removed');
       }),
-      map(() => {
-        return userId;
-      }),
+      map(() => userId),
       catchError((error) => {
         alert('Couldnt Remove');
         throw new Error(error);
@@ -52,20 +41,17 @@ export class UsersDataService implements OnDestroy {
     );
   }
 
-  edit(editedUser: User): void {
-    this.editSubscription = this.http.put<User>(`${this.baseUrl}`, editedUser, httpOptions).pipe(
+  edit(editedUser: User): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}`, editedUser, httpOptions).pipe(
       tap(() => {
         alert('User Updated');
       }),
+      map(() => editedUser),
       catchError((error) => {
         alert('Couldnt update user');
         throw new Error(error);
       }),
-    ).subscribe(() => {
-      let users: User[] = Array.from(this.usersSource.getValue());
-      users = users.map((user => user.id === editedUser.id ? editedUser : user));
-      this.usersSource.next(cloneDeep(users));
-    });
+    );
   }
 }
 
