@@ -9,6 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './services/in-memory-data.service';
+import { StoreModule } from '@ngrx/store';
+import { usersReducer } from '../app/reducers/users-reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { UsersEffects } from '../app/effects/users-effects.service';
 
 @NgModule({
   imports: [
@@ -20,6 +24,10 @@ import { InMemoryDataService } from './services/in-memory-data.service';
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, { dataEncapsulation: false }),
     FormsModule,
+    StoreModule.forRoot({
+      users: usersReducer
+    }),
+    EffectsModule.forRoot([UsersEffects])
   ],
 })
 export class CoreModule {

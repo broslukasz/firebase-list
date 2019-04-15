@@ -6,17 +6,18 @@ import { catchError } from 'rxjs/operators';
 import { tap } from 'rxjs/internal/operators/tap';
 import { cloneDeep } from 'lodash-es';
 import { environment } from '../../../environments/environment';
-import { User } from '../user.model';
+import { User } from '../../models/user.model';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
 
-@Injectable()
-export class UserDataService implements OnDestroy {
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersDataService implements OnDestroy {
   private readonly baseUrl = `${environment.apiUrl}/users`;
   private usersSource = new BehaviorSubject<User[] | null>(null);
-  users$: Observable<User[] | null> = this.usersSource.asObservable();
 
   private usersSubscription: Subscription;
   private deleteSubscription: Subscription;
@@ -31,15 +32,13 @@ export class UserDataService implements OnDestroy {
     this.editSubscription.unsubscribe();
   }
 
-  findAll(): void {
-    this.usersSubscription = this.http.get<User[]>(`${this.baseUrl}`).pipe(
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}`).pipe(
       catchError((error) => {
         alert('Error');
         throw new Error(error);
       }),
-    ).subscribe((users: User[]) => {
-      this.usersSource.next(users);
-    });
+    );
   }
 
   remove(userId: string): void {

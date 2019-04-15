@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UserDataService } from './user-data.service';
+import { UsersDataService } from './users-data.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('UserDataService', () => {
+describe('UsersDataService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule
     ],
-    providers: [UserDataService]
+    providers: [UsersDataService]
   }));
 
   it('should be created', () => {
-    const service: UserDataService = TestBed.get(UserDataService);
+    const service: UsersDataService = TestBed.get(UsersDataService);
     expect(service).toBeTruthy();
   });
 });

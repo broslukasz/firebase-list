@@ -5,7 +5,6 @@ import { UsersRoutingModule } from './users.routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { MatButtonModule } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
-import { UserDataService } from './services/user-data.service';
 
 @NgModule({
   declarations: [
@@ -17,9 +16,6 @@ import { UserDataService } from './services/user-data.service';
     UsersRoutingModule,
     SharedModule,
     MatButtonModule
-  ],
-  providers: [
-    UserDataService
   ],
   entryComponents: [EditUserDialogComponent]
 })

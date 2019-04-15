@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './services/user.service';
-import { User } from './user.model';
+import { User } from '../models/user.model';
 import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
 import { cloneDeep } from 'lodash-es';
 import { UserTableHeader } from './user-table-header.enum';
-import { UserDataService } from './services/user-data.service';
+import { UsersDataService } from './services/users-data.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../models/app-state';
+import * as usersActions from './../actions/users.actions';
 
 @Component({
   selector: 'app-users',
@@ -33,13 +36,15 @@ export class UsersComponent implements OnInit, OnDestroy {
   private dialogSubscription: Subscription;
 
   constructor(
-    private userDataService: UserDataService,
-    private dialog: MatDialog
-  ) { }
+    private userDataService: UsersDataService,
+    private dialog: MatDialog,
+    private store: Store<AppState>
+  ) {
+    this.users = this.store.select(state => state.users);
+  }
 
   ngOnInit(): void {
-    this.users = this.userDataService.users$;
-    this.userDataService.findAll();
+    this.store.dispatch(new usersActions.LoadUsersAction());
   }
 
   ngOnDestroy(): void {

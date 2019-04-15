@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { User } from '../user.model';
+import { User } from '../../models/user.model';
 import { UserTableHeader } from '../user-table-header.enum';
 
 @Component({
